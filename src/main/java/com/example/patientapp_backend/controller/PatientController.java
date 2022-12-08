@@ -16,26 +16,44 @@ public class PatientController {
     @Autowired
     private PatientDao dao;
 
-    @CrossOrigin (origins = "*")
-    @PostMapping(path = "/add",consumes = "application/json",produces = "application/json")
-    public Map<String,String> AddPatient(@RequestBody Patient p)
-    {
+    @CrossOrigin(origins = "*")
+    @PostMapping(path = "/add", consumes = "application/json", produces = "application/json")
+    public Map<String, String> AddPatient(@RequestBody Patient p) {
         System.out.println(p.getName().toString());
         System.out.println(p.getAddress().toString());
         System.out.println(p.getMobile().toString());
         System.out.println(p.getDateOfAppointment().toString());
         System.out.println(p.getDoctorName().toString());
         dao.save(p);
-        HashMap<String,String>map=new HashMap<>();
-        map.put("status","success");
+        HashMap<String, String> map = new HashMap<>();
+        map.put("status", "success");
         return map;
     }
 
-    @CrossOrigin (origins = "*")
+    @CrossOrigin(origins = "*")
     @GetMapping("/view")
-    public List<Patient> View()
-    {
-        return (List<Patient>)dao.findAll();
+    public List<Patient> View() {
+        return (List<Patient>) dao.findAll();
     }
 
+    @CrossOrigin(origins = "*")
+    @PostMapping(path = "/search", consumes = "application/json", produces = "application/json")
+    public List<Patient> SearchPatient(@RequestBody Patient p) {
+        String name = p.getName();
+        System.out.println(name);
+        return (List<Patient>) dao.SearchPatient(p.getName());
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping(path = "/delete", consumes = "application/json", produces = "application/json")
+    public HashMap<String, String> DeletePatient(@RequestBody Patient p) {
+
+        String id = String.valueOf(p.getId());
+        System.out.println(id);
+        dao.DeletePatient(p.getId());
+        HashMap<String, String> map = new HashMap<>();
+        map.put("status", "success");
+        return map;
+
+    }
 }
